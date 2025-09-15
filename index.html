@@ -5,11 +5,10 @@
   <title>Monaco Playground</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- icon pack-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Monaco Editor -->
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
@@ -31,7 +30,7 @@
 
   <div class="w-full max-w-5xl bg-[#1e1e1e] p-4 rounded-xl shadow-2xl border border-gray-700">
     <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-      <h1 class="text-l font-bold">Code something</h1>
+      <h1 class="text-l font-bold">Do some coding</h1>
       <div class="flex items-center gap-4">
         <!-- Language Selector -->
         <select id="languageSelect" class="text-black px-3 py-2 rounded">
@@ -44,9 +43,9 @@
         </select>
 
         <!-- Theme Toggle -->
-        <a href="https://github.com/MioJoester" id="toggleThemeBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+        <button  class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
           <i class="fab fa-github"></i>
-        </a>
+        </button>
       </div>
     </div>
 
@@ -86,8 +85,8 @@
         editor.setValue(defaultTemplates[lang] || "");
       });
 
-
-     
+      // Theme Toggle
+      
   </script>
 </body>
 </html>
