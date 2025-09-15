@@ -1,39 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Playground</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Monaco Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Monaco Editor -->
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #1e1e1e;
+    }
+    #editor {
+      height: 500px;
+      border-radius: 0.5rem;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center min-h-screen bg-gray-900 p-4 text-white">
 
-  <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
-    <h2 class="text-2xl font-semibold mb-4 text-center">🌟 My Playground</h2>
-    
-    <div class="mb-4">
-      <label for="inputText" class="block text-sm font-medium text-gray-700 mb-1">Type something:</label>
-      <input type="text" id="inputText" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500" placeholder="Try 'Hello world'">
+  <div class="w-full max-w-5xl bg-[#1e1e1e] p-4 rounded-xl shadow-2xl border border-gray-700">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+      <h1 class="text-2xl font-bold">📝 Monaco Editor Playground</h1>
+      <div class="flex items-center gap-4">
+        <!-- Language Selector -->
+        <select id="languageSelect" class="text-black px-3 py-2 rounded">
+          <option value="javascript">JavaScript</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="json">JSON</option>
+          <option value="python">Python</option>
+          <option value="markdown">Markdown</option>
+        </select>
+
+        <!-- Theme Toggle -->
+        <button id="toggleThemeBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+          🌙
+        </button>
+      </div>
     </div>
 
-    <button id="runButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150">
-      Run
-    </button>
-
-    <div class="mt-4 bg-gray-100 border rounded-lg p-3 min-h-[60px]" id="output">
-      Output will appear here...
-    </div>
+    <!-- Editor -->
+    <div id="editor" class="mb-4"></div>
   </div>
 
   <script>
-    document.getElementById('runButton').addEventListener('click', () => {
-      const input = document.getElementById('inputText').value;
-      const output = document.getElementById('output');
-      if (input.trim() === '') {
-        output.textContent = "⚠️ Please enter something!";
-      } else {
-        output.textContent = `✅ You typed: "${input}"`;
-      }
+    let editor;
+    let currentTheme = "vs-dark";
+
+    require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
+
+    require(["vs/editor/editor.main"], function () {
+      editor = monaco.editor.create(document.getElementById("editor"), {
+        value: `// Start typing JavaScript here!\nfunction greet(name) {\n  return \`Hello, \${name}!\`;\n}`,
+        language: "javascript",
+        theme: currentTheme,
+        fontSize: 14,
+        automaticLayout: true,
+      });
+
+      // Language Switcher
+      document.getElementById("languageSelect").addEventListener("change", (e) => {
+        const lang = e.target.value;
+        monaco.editor.setModelLanguage(editor.getModel(), lang);
+
+        // Set default template for each language
+        const defaultTemplates = {
+          javascript: `// JavaScript playground\nconsole.log("Hello!");`,
+          html: `<!-- HTML playground -->\n<!DOCTYPE html>\n<html>\n  <head><title>HTML</title></head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>`,
+          css: `/* CSS playground */\nbody {\n  background: #f0f0f0;\n  color: #333;\n}`,
+          json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
+          python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
+          markdown: `# Markdown Playground\n\nType some *markdown* here.`,
+        };
+        editor.setValue(defaultTemplates[lang] || "");
+      });
+
+      // Theme Toggle
+      const toggleBtn = document.getElementById("toggleThemeBtn");
+      toggleBtn.addEventListener("click", () => {
+        currentTheme = currentTheme === "vs-dark" ? "vs-light" : "vs-dark";
+        monaco.editor.setTheme(currentTheme);
+        toggleBtn.innerHTML = currentTheme === "vs-dark" ? "🌙" : "☀️";
+        document.body.className = currentTheme === "vs-dark"
+          ? "bg-gray-900 text-white"
+          : "bg-gray-100 text-black";
+      });
     });
   </script>
 </body>
