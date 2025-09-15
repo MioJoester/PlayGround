@@ -5,7 +5,8 @@
   <title>Monaco Playground</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +27,7 @@
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-black p-4 text-white">
+<body class="flex items-center justify-center min-h-screen bg-gray-900 p-4 text-white">
 
   <div class="w-full max-w-5xl bg-[#1e1e1e] p-4 rounded-xl shadow-2xl border border-gray-700">
     <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
@@ -43,9 +44,11 @@
         </select>
 
         <!-- Theme Toggle -->
-        <button  class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+        <a href="https://github.com/MioJoester" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
           <i class="fab fa-github"></i>
-        </button>
+        </a>
+
+        <button id="toggleThemeBtn"  class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition">🌙</button>
       </div>
     </div>
 
@@ -86,7 +89,16 @@
       });
 
       // Theme Toggle
-      
+      const toggleBtn = document.getElementById("toggleThemeBtn");
+      toggleBtn.addEventListener("click", () => {
+        currentTheme = currentTheme === "vs-dark" ? "vs-light" : "vs-dark";
+        monaco.editor.setTheme(currentTheme);
+        toggleBtn.innerHTML = currentTheme === "vs-dark" ? "🌙" : "☀️";
+        document.body.className = currentTheme === "vs-dark"
+          ? "bg-gray-900 text-white"
+          : "bg-gray-100 text-black";
+      });
+    });
   </script>
 </body>
 </html>
