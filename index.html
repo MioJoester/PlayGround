@@ -6,7 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Monaco Editor -->
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
 
   <style>
@@ -14,7 +20,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: #000; /* Fully black background */
+      background-color: #1e1e1e;
     }
     #editor {
       height: 500px;
@@ -22,12 +28,11 @@
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-black text-white">
+<body class="flex items-center justify-center min-h-screen bg-black p-4 text-white">
 
-  <div class="w-full max-w-5xl p-4 bg-[#1e1e1e] rounded-xl shadow-2xl border border-gray-700">
-    <!-- Header -->
+  <div class="w-full max-w-5xl bg-[#1e1e1e] p-4 rounded-xl shadow-2xl border border-gray-700">
     <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-      <h1 class="text-l font-bold"><i class="fas fa-code"></i> Code something</h1>
+      <h1 class="text-l font-bold"> <i class="fas fa-code"></i> Code something</h1>
       <div class="flex items-center gap-4">
         <!-- Language Selector -->
         <select id="languageSelect" class="text-black px-3 py-2 rounded">
@@ -39,113 +44,60 @@
           <option value="markdown">Markdown</option>
         </select>
 
-        <!-- Theme Toggle Button -->
-        <button id="toggleThemeBtn" class="px-3 py-2 rounded bg-gray-800 text-white hover:bg-gray-700">🌙</button>
+        <!-- Theme Toggle -->
+        
 
-        <!-- Download Button -->
-        <button id="downloadBtn" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-500">
-          <i class="fas fa-download"></i>
-        </button>
-
-        <!-- Clear Editor Button -->
-        <button id="clearBtn" class="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-500">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+       
       </div>
     </div>
 
-    <!-- Monaco Editor -->
+    <!-- Editor -->
     <div id="editor" class="mb-4"></div>
   </div>
 
   <script>
     let editor;
-    let currentTheme = localStorage.getItem("theme") || "vs-dark";
-    let currentLanguage = localStorage.getItem("language") || "javascript";
-
-    const defaultTemplates = {
-      javascript: `// JavaScript playground\nconsole.log("Hello!");`,
-      html: `<!-- HTML playground -->\n<!DOCTYPE html>\n<html>\n  <head><title>HTML</title></head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>`,
-      css: `/* CSS playground */\nbody {\n  background: #f0f0f0;\n  color: #333;\n}`,
-      json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
-      python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
-      markdown: `# Markdown Playground\n\nType some *markdown* here.`,
-    };
+    let currentTheme = "vs-dark";
 
     require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
 
     require(["vs/editor/editor.main"], function () {
-      const savedCode = localStorage.getItem("code") || defaultTemplates[currentLanguage];
-
       editor = monaco.editor.create(document.getElementById("editor"), {
-        value: savedCode,
-        language: currentLanguage,
+        value: `// Start typing JavaScript here!\nfunction greet(name) {\n  return \`Hello, \${name}!\`;\n}`,
+        language: "javascript",
         theme: currentTheme,
         fontSize: 14,
         automaticLayout: true,
       });
 
-      document.getElementById("languageSelect").value = currentLanguage;
-
-      // Language switching
+      // Language Switcher
       document.getElementById("languageSelect").addEventListener("change", (e) => {
         const lang = e.target.value;
-        currentLanguage = lang;
         monaco.editor.setModelLanguage(editor.getModel(), lang);
+
+        // Set default template for each language
+        const defaultTemplates = {
+          javascript: `// JavaScript playground\nconsole.log("Hello!");`,
+          html: `<!-- HTML playground -->\n<!DOCTYPE html>\n<html>\n  <head><title>HTML</title></head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>`,
+          css: `/* CSS playground */\nbody {\n  background: #f0f0f0;\n  color: #333;\n}`,
+          json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
+          python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
+          markdown: `# Markdown Playground\n\nType some *markdown* here.`,
+        };
         editor.setValue(defaultTemplates[lang] || "");
-        localStorage.setItem("language", lang);
       });
 
-      // Theme toggle
+      // Theme Toggle
       const toggleBtn = document.getElementById("toggleThemeBtn");
-      const updateThemeUI = () => {
+      toggleBtn.addEventListener("click", () => {
+        currentTheme = currentTheme === "vs-dark" ? "vs-light" : "vs-dark";
         monaco.editor.setTheme(currentTheme);
         toggleBtn.innerHTML = currentTheme === "vs-dark" ? "🌙" : "☀️";
         document.body.className = currentTheme === "vs-dark"
-          ? "bg-black text-white"
+          ? "bg-gray-900 text-white"
           : "bg-gray-100 text-black";
-      };
-
-      toggleBtn.addEventListener("click", () => {
-        currentTheme = currentTheme === "vs-dark" ? "vs-light" : "vs-dark";
-        localStorage.setItem("theme", currentTheme);
-        updateThemeUI();
-      });
-
-      updateThemeUI();
-
-      // Auto-save code
-      editor.onDidChangeModelContent(() => {
-        localStorage.setItem("code", editor.getValue());
-      });
-
-      // Download code
-      document.getElementById("downloadBtn").addEventListener("click", () => {
-        const blob = new Blob([editor.getValue()], { type: "text/plain;charset=utf-8" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `code.${getExtension(currentLanguage)}`;
-        a.click();
-      });
-
-      // Clear editor
-      document.getElementById("clearBtn").addEventListener("click", () => {
-        editor.setValue("");
-        localStorage.removeItem("code");
       });
     });
-
-    function getExtension(language) {
-      const map = {
-        javascript: "js",
-        html: "html",
-        css: "css",
-        json: "json",
-        python: "py",
-        markdown: "md"
-      };
-      return map[language] || "txt";
-    }
   </script>
 </body>
 </html>
