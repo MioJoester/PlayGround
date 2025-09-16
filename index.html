@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
-    <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -44,10 +43,21 @@
           <option value="markdown">Markdown</option>
         </select>
 
-        <!-- Theme Toggle -->
-        
+        <!-- Download Button -->
+        <button id="downloadBtn" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-500" title="Download">
+          <i class="fas fa-download"></i>
+        </button>
 
-       
+        <!-- Clear Button -->
+        <button id="clearBtn" class="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-500" title="Clear">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+
+        <!-- GitHub Link -->
+        <a href="https://github.com/your-repo" target="_blank" rel="noopener noreferrer"
+           class="px-3 py-2 rounded bg-gray-800 text-white hover:bg-gray-700" title="View on GitHub">
+          <i class="fab fa-github"></i>
+        </a>
       </div>
     </div>
 
@@ -59,11 +69,20 @@
     let editor;
     let currentTheme = "vs-dark";
 
+    const defaultTemplates = {
+      javascript: `// JavaScript playground\nconsole.log("Hello!");`,
+      html: `<!-- HTML playground -->\n<!DOCTYPE html>\n<html>\n  <head><title>HTML</title></head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>`,
+      css: `/* CSS playground */\nbody {\n  background: #f0f0f0;\n  color: #333;\n}`,
+      json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
+      python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
+      markdown: `# Markdown Playground\n\nType some *markdown* here.`,
+    };
+
     require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
 
     require(["vs/editor/editor.main"], function () {
       editor = monaco.editor.create(document.getElementById("editor"), {
-        value: `// Start typing JavaScript here!\nfunction greet(name) {\n  return \`Hello, \${name}!\`;\n}`,
+        value: defaultTemplates["javascript"],
         language: "javascript",
         theme: currentTheme,
         fontSize: 14,
@@ -74,30 +93,37 @@
       document.getElementById("languageSelect").addEventListener("change", (e) => {
         const lang = e.target.value;
         monaco.editor.setModelLanguage(editor.getModel(), lang);
-
-        // Set default template for each language
-        const defaultTemplates = {
-          javascript: `// JavaScript playground\nconsole.log("Hello!");`,
-          html: `<!-- HTML playground -->\n<!DOCTYPE html>\n<html>\n  <head><title>HTML</title></head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>`,
-          css: `/* CSS playground */\nbody {\n  background: #f0f0f0;\n  color: #333;\n}`,
-          json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
-          python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
-          markdown: `# Markdown Playground\n\nType some *markdown* here.`,
-        };
         editor.setValue(defaultTemplates[lang] || "");
       });
 
-      // Theme Toggle
-      const toggleBtn = document.getElementById("toggleThemeBtn");
-      toggleBtn.addEventListener("click", () => {
-        currentTheme = currentTheme === "vs-dark" ? "vs-light" : "vs-dark";
-        monaco.editor.setTheme(currentTheme);
-        toggleBtn.innerHTML = currentTheme === "vs-dark" ? "🌙" : "☀️";
-        document.body.className = currentTheme === "vs-dark"
-          ? "bg-gray-900 text-white"
-          : "bg-gray-100 text-black";
+      // Download Button
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        const lang = document.getElementById("languageSelect").value;
+        const code = editor.getValue();
+        const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `code.${getExtension(lang)}`;
+        a.click();
+      });
+
+      // Clear Button
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        editor.setValue("");
       });
     });
+
+    function getExtension(language) {
+      const map = {
+        javascript: "js",
+        html: "html",
+        css: "css",
+        json: "json",
+        python: "py",
+        markdown: "md"
+      };
+      return map[language] || "txt";
+    }
   </script>
 </body>
 </html>
