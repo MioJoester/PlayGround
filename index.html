@@ -22,7 +22,7 @@
       background-color: #1e1e1e;
     }
     #editor {
-      height: 480px;
+      height: 500px;
       border-radius: 0.5rem;
     }
   </style>
@@ -41,20 +41,22 @@
           <option value="json">JSON</option>
           <option value="python">Python</option>
           <option value="markdown">Markdown</option>
+          <option value="c">C</option>
+          <option value="cpp">C++</option>
         </select>
 
         <!-- Download Button -->
-        <button id="downloadBtn" class="px-3 py-2 rounded  text-white hover:bg-green-500" title="Download">
+        <button id="downloadBtn" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-500" title="Download">
           <i class="fas fa-download"></i>
         </button>
 
         <!-- Clear Button -->
-        <button id="clearBtn" class="px-3 py-2 rounded  text-white hover:bg-red-500" title="Clear">
+        <button id="clearBtn" class="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-500" title="Clear">
           <i class="fas fa-trash-alt"></i>
         </button>
 
         <!-- GitHub Link -->
-        <a href="https://github.com/MioJoester" target="_blank" rel="noopener noreferrer"
+        <a href="https://github.com/your-repo" target="_blank" rel="noopener noreferrer"
            class="px-3 py-2 rounded bg-gray-800 text-white hover:bg-gray-700" title="View on GitHub">
           <i class="fab fa-github"></i>
         </a>
@@ -76,6 +78,8 @@
       json: `{\n  "name": "Monaco Playground",\n  "version": 1\n}`,
       python: `# Python playground\ndef greet(name):\n  return f"Hello, {name}!"`,
       markdown: `# Markdown Playground\n\nType some *markdown* here.`,
+      c: `// C playground\n#include <stdio.h>\n\nint main() {\n    printf("Hello, C!\\n");\n    return 0;\n}`,
+      cpp: `// C++ playground\n#include <iostream>\n\nint main() {\n    std::cout << "Hello, C++!" << std::endl;\n    return 0;\n}`
     };
 
     require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
@@ -120,7 +124,9 @@
         css: "css",
         json: "json",
         python: "py",
-        markdown: "md"
+        markdown: "md",
+        c: "c",
+        cpp: "cpp"
       };
       return map[language] || "txt";
     }
