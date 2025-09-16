@@ -6,20 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
-  <script defer src="/_vercel/insights/script.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
 
   <style>
     html, body {
-      display:flex;
-      align-items:center;
-      justify-content:center;
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: #1e1e1e;
+      background-color: #000; /* Fully black background */
     }
     #editor {
       height: 500px;
@@ -27,9 +22,10 @@
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-black p-4 text-white">
+<body class="flex items-center justify-center min-h-screen bg-black text-white">
 
-  <div class="w-full max-w-5xl bg-[#1e1e1e] p-4 rounded-xl shadow-2xl border border-gray-700">
+  <div class="w-full max-w-5xl p-4 bg-[#1e1e1e] rounded-xl shadow-2xl border border-gray-700">
+    <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
       <h1 class="text-l font-bold"><i class="fas fa-code"></i> Code something</h1>
       <div class="flex items-center gap-4">
@@ -58,7 +54,7 @@
       </div>
     </div>
 
-    <!-- Editor -->
+    <!-- Monaco Editor -->
     <div id="editor" class="mb-4"></div>
   </div>
 
@@ -89,10 +85,9 @@
         automaticLayout: true,
       });
 
-      // Update language dropdown
       document.getElementById("languageSelect").value = currentLanguage;
 
-      // Handle language change
+      // Language switching
       document.getElementById("languageSelect").addEventListener("change", (e) => {
         const lang = e.target.value;
         currentLanguage = lang;
@@ -107,7 +102,7 @@
         monaco.editor.setTheme(currentTheme);
         toggleBtn.innerHTML = currentTheme === "vs-dark" ? "🌙" : "☀️";
         document.body.className = currentTheme === "vs-dark"
-          ? "bg-gray-900 text-white"
+          ? "bg-black text-white"
           : "bg-gray-100 text-black";
       };
 
