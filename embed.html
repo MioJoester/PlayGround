@@ -56,6 +56,12 @@
           <option value="18">18px</option>
         </select>
 
+        <!-- Fullscreen Button -->
+        <button id="fullscreenBtn" class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-500" title="Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+
+
         <button id="toggleTheme" class="px-3 py-2 rounded bg-blue-600 hover:bg-blue-500">
           <i class="fas fa-adjust"></i>
         </button>
@@ -200,6 +206,34 @@
       };
       return map[language] || "txt";
     }
+
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+  let isFullscreen = false;
+
+  fullscreenBtn.addEventListener("click", () => {
+    const container = document.documentElement; // or use a specific wrapper like the div containing the editor
+    if (!isFullscreen) {
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) { /* Safari */
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) { /* IE11 */
+        container.msRequestFullscreen();
+      }
+      fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    }
+    isFullscreen = !isFullscreen;
+  });
+
   </script>
 </body>
 </html>
