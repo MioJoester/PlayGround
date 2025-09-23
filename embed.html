@@ -79,26 +79,28 @@
   </div>
 
   <!-- 🪟 Modal -->
-  <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
-    <div class="bg-white w-full max-w-4xl h-[80vh] rounded-lg shadow-lg relative">
-      
-      <!-- Modal Header -->
-      <div class="flex justify-between items-center p-4 border-b border-gray-200">
-        <h2 class="text-lg font-medium">Embed Preview</h2>
-        <button id="closeModal" class="text-gray-500 hover:text-black" title="Close">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
+ <!-- 🪟 Modal -->
+<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-lg flex flex-col overflow-hidden">
 
-      <!-- Modal Body -->
-      <div class="p-4 h-full">
-        <iframe
-          src="https://play-ground-ruby.vercel.app/"
-          class="w-full h-[335px] border border-gray-200 rounded-md"
-        ></iframe>
-      </div>
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center p-4 border-b border-gray-200">
+      <h2 class="text-lg font-medium">Embed Preview</h2>
+      <button id="closeModal" class="text-gray-500 hover:text-black" title="Close">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="flex-1 min-h-0">
+      <iframe
+        src="https://play-ground-ruby.vercel.app/"
+        class="w-full h-full border-none"
+      ></iframe>
     </div>
   </div>
+</div>
+
 
   <!-- Scripts -->
   <script>
