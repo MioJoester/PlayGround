@@ -1,39 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Embed Page</title>
+  <meta charset="UTF-8" />
+  <title>Embed Editor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Prism.js Theme (Tomorrow Night) -->
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
+  <style>
+    pre::-webkit-scrollbar {
+      height: 8px;
+    }
+    pre::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
 
-  <div class="w-full max-w-3xl bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-    <h1 class="text-2xl font-bold mb-4">Embed editor in your site</h1>
+<body class="bg-gray-950 text-white flex items-center justify-center min-h-screen p-6">
 
-    <div class="relative">
-      <pre class="bg-gray-900 text-green-400 p-4 rounded-md overflow-auto text-sm">
-<code id="embedCode">&lt;iframe src="https://your-domain.com/editor" width="100%" height="500" style="border:1px solid #ccc; border-radius:8px;"&gt;&lt;/iframe&gt;</code>
-      </pre>
+  <div class="w-full max-w-3xl bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
+    
+    <h1 class="text-3xl font-bold mb-6 text-center text-white">📎 Embed editor in your site</h1>
 
-      <!-- Copy Button -->
+    <div class="relative rounded-lg overflow-hidden">
       <button
         id="copyBtn"
-        class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2"
+        class="absolute top-3 right-3 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 shadow transition"
         title="Copy Embed Code"
       >
-        <i class="fas fa-copy"></i> Copy
+        <i class="fas fa-copy"></i>
+        Copy
       </button>
+
+      <pre class="language-markup rounded-lg text-sm overflow-auto">
+<code id="embedCode" class="language-markup">
+&lt;iframe src="https://your-domain.com/editor"
+        width="100%" height="500"
+        style="border:1px solid #ccc; border-radius:8px;"&gt;
+&lt;/iframe&gt;
+</code>
+      </pre>
     </div>
 
-    <!-- Copy Status Message -->
-    <p id="copyStatus" class="text-sm text-green-400 mt-3 hidden">Copied to clipboard!</p>
+    <p id="copyStatus" class="text-sm text-green-400 mt-4 hidden transition-opacity duration-300">✅ Copied to clipboard!</p>
   </div>
 
   <script>
@@ -42,10 +62,14 @@
     const copyStatus = document.getElementById("copyStatus");
 
     copyBtn.addEventListener("click", () => {
-      const codeText = embedCode.textContent;
-      navigator.clipboard.writeText(codeText).then(() => {
+      const text = embedCode.textContent;
+      navigator.clipboard.writeText(text).then(() => {
         copyStatus.classList.remove("hidden");
-        setTimeout(() => copyStatus.classList.add("hidden"), 2000);
+        copyStatus.classList.add("opacity-100");
+        setTimeout(() => {
+          copyStatus.classList.add("hidden");
+          copyStatus.classList.remove("opacity-100");
+        }, 2000);
       });
     });
   </script>
