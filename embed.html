@@ -38,12 +38,15 @@
 
 <body class="flex items-center justify-center min-h-screen text-gray-900 p-4">
 
+  <!-- 📦 Main Container -->
   <div class="w-full max-w-3xl bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200">
-    
+
+    <!-- 🧾 Title -->
     <h1 class="text-2xl md:text-3xl font-semibold mb-6 text-center">
       Embed editor in your site
     </h1>
 
+    <!-- 💻 Code Block with Copy -->
     <div class="relative rounded-md overflow-hidden">
       <button
         id="copyBtn"
@@ -51,7 +54,7 @@
         title="Copy Embed Code"
       >
         <i data-lucide="clipboard" class="w-4 h-4"></i>
-
+      
       </button>
 
       <pre class="language-markup text-sm overflow-auto bg-gray-50 border border-gray-200 rounded-md p-4">
@@ -64,26 +67,73 @@
       </pre>
     </div>
 
+    <!-- ✅ Copy status -->
     <p id="copyStatus" class="text-sm text-black-600 mt-4 hidden text-center">Copied to clipboard!</p>
+
+    <!-- 🔍 Preview Button -->
+    <div class="mt-6 text-center">
+      <button id="previewBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm transition">
+        Preview Embed
+      </button>
+    </div>
   </div>
 
+  <!-- 🪟 Modal -->
+  <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
+    <div class="bg-white w-full max-w-4xl h-[80vh] rounded-lg shadow-lg relative">
+      
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium">Embed Preview</h2>
+        <button id="closeModal" class="text-gray-500 hover:text-black" title="Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-4 h-full">
+        <iframe
+          src="https://play-ground-ruby.vercel.app/"
+          class="w-full h-full border border-gray-200 rounded-md"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script>
-    // Lucide Icons Init
     lucide.createIcons();
 
-    // Copy to Clipboard
+    // Copy Button
     const copyBtn = document.getElementById("copyBtn");
     const embedCode = document.getElementById("embedCode");
     const copyStatus = document.getElementById("copyStatus");
 
     copyBtn.addEventListener("click", () => {
-      const text = embedCode.textContent;
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(embedCode.textContent).then(() => {
         copyStatus.classList.remove("hidden");
-        setTimeout(() => {
-          copyStatus.classList.add("hidden");
-        }, 2000);
+        setTimeout(() => copyStatus.classList.add("hidden"), 2000);
       });
+    });
+
+    // Preview Modal
+    const previewBtn = document.getElementById("previewBtn");
+    const previewModal = document.getElementById("previewModal");
+    const closeModal = document.getElementById("closeModal");
+
+    previewBtn.addEventListener("click", () => {
+      previewModal.classList.remove("hidden");
+    });
+
+    closeModal.addEventListener("click", () => {
+      previewModal.classList.add("hidden");
+    });
+
+    // Close modal on outside click
+    previewModal.addEventListener("click", (e) => {
+      if (e.target === previewModal) {
+        previewModal.classList.add("hidden");
+      }
     });
   </script>
 
