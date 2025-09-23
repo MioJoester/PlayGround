@@ -8,7 +8,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Prism.js (Tomorrow Night Theme) -->
+  <!-- Prism.js -->
   <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
@@ -24,7 +24,28 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: #0f172a;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #0f172a, #1e293b, #0ea5e9, #2563eb);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      z-index: -2;
+      opacity: 0.2;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     #particles-js {
@@ -43,29 +64,40 @@
       background-color: #4b5563;
       border-radius: 4px;
     }
+
+    /* Icon animation */
+    button:hover i {
+      transform: rotate(10deg);
+      transition: transform 0.2s;
+    }
   </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen text-white p-6 relative">
+<body class="flex items-center justify-center min-h-screen text-white p-4 md:p-6">
 
   <!-- 🎇 Particle Background -->
   <div id="particles-js"></div>
 
-  <div class="w-full max-w-3xl bg-gray-900 p-6 rounded-2xl shadow-2xl border border-gray-800 backdrop-blur-sm bg-opacity-90">
-    
-    <h1 class="text-3xl font-bold mb-6 text-center text-white">Embed editor in your site</h1>
+  <!-- 📦 Main Card -->
+  <div class="w-full max-w-3xl bg-gray-900/80 p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-700 backdrop-blur-xl transition-all">
 
-    <div class="relative rounded-lg overflow-hidden">
+    <!-- 🌟 Title -->
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-6 text-center text-white drop-shadow-[0_0_10px_#38bdf8]">
+      Embed editor in your site
+    </h1>
+
+    <!-- 🧾 Code Snippet -->
+    <div class="relative rounded-lg overflow-hidden group">
       <button
         id="copyBtn"
-        class="absolute top-3 right-3 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 shadow transition"
+        class="absolute top-3 right-3 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 shadow transition-all duration-200 focus:outline-none"
         title="Copy Embed Code"
       >
         <i data-lucide="clipboard" class="w-4 h-4"></i>
-       
+        Copy
       </button>
 
-      <pre class="language-markup rounded-lg text-sm overflow-auto">
+      <pre class="language-markup rounded-lg text-sm overflow-auto bg-gray-800 border border-gray-700 group-hover:shadow-lg group-hover:shadow-blue-500/20 transition-all duration-200">
 <code id="embedCode" class="language-markup">
 &lt;iframe src="https://play-ground-ruby.vercel.app/"
         width="100%" height="500"
@@ -75,10 +107,11 @@
       </pre>
     </div>
 
-    <p id="copyStatus" class="text-sm text-white-400 mt-4 hidden transition-opacity duration-300 text-center"> Copied to clipboard!</p>
+    <!-- ✅ Copy status -->
+    <p id="copyStatus" class="text-sm text-white-400 mt-4 hidden transition-opacity duration-300 text-center">Copied to clipboard!</p>
   </div>
 
-  <!-- Scripts -->
+  <!-- ⚙️ Scripts -->
   <script>
     // Lucide Icons Init
     lucide.createIcons();
